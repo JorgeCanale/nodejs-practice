@@ -1,4 +1,6 @@
 import {createServer} from 'node:http';
+import fs from 'fs/promises';
+
 
 const PORT = process.env.PORT2;
 
@@ -9,6 +11,8 @@ const server = createServer((req,res)=>{
     // res.statusCode(200);
     /*asi mismo existe la posibilidad de al setear el header setear el statusCode de la respuesta y es de
     la siguiente manera */
+   
+    
     res.writeHead(500, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({message: "Server Error"}));
 });

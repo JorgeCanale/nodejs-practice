@@ -1,23 +1,35 @@
 //import en modules
 import {createServer} from 'node:http'; //http es un modulo de nodejs 
-import {getPost} from './post.js'
+import fs from 'fs/promises';
+import url from 'url';
+import path from 'path';
+import {getPost} from './post.js';
 
 const hostname = process.env.HOST; 
 const port = process.env.PORT || 3000;
-const server = createServer((req, res) => {
 
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+const server = createServer( async(req, res) => {
   try {
     if(req.method === 'GET'){
-
+      let filepath;
         if(req.url === "/"){
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html'); 
-    res.end("<h3> Home page</h3>");
-  }else if(req.url === "/posts"){
-    let posts = getPost();
-    res.writeHead(200,{'Conten-Type': 'application/json'});
-    res.end(JSON.stringify(posts));
-  }
+          filepath = path.join(__dirname, 'public','index.html');
+          console.log(filepath);
+        }else if(req.url === "/about"){
+          filepath = path.join(__dirname, 'public', 'about.html');
+          console.log(filepath);
+        }else{
+          throw new Error('Not Found');
+        }
+
+        const data = await fs.readFile(filepath);
+        res.setHeader('Content-Type', 'text/html');
+        res.write(data);
+        res.end();
     }else{
       throw new Error('Method not allowed')
     }

@@ -1,15 +1,24 @@
 //import en modules
-import {createServer} from 'node:http' //http es un modulo de nodejs 
+import {createServer} from 'node:http'; //http es un modulo de nodejs 
+import {getPost} from './post.js'
 const hostname = process.env.HOST; 
 const port = process.env.PORT || 3000;
 const server = createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/html');
-  /*en el caso de enviar codigo html el content-type siempre debe ser html ya que si lo envio como 
-  content-type text/plain el codigo html aparecera como un texto y no como un titulo de primer nivel
-  (en este caso) */
-  res.end('<h3> OMG EL SERVER FUNCIONA!!! </h3>');
 
+  if(req.url === "/"){
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html'); 
+    res.end("<h3> Home page</h3>");
+  }else if(req.url === "/posts"){
+    res.statusCode = 200;
+    let post = getPost()
+    res.setHeader('Content-Type', 'text/plain' );
+    res.end("estas accediendo a tu perfil");
+  }else{
+    res.statusCode = 404;
+    res.setHeader('Content-Type', 'text/html');
+    res.end("<h1>Page not found </h1>");
+  }
 });
 
 

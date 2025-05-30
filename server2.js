@@ -1,5 +1,5 @@
 import {createServer} from 'node:http';
-
+import {logger,JSONMiddleware} from './middleware.js';
 
 const PORT = process.env.PORT2;
 
@@ -11,13 +11,12 @@ const users = [
 
 
 const server = createServer((req,res)=>{
+    logger(req,res,()=>{
+        if(req.url === "/api/users"){
+            res.end(JSON.stringify(users));
+        }
+    });
 
-    if(req.url === "/api/users"){
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(users))
-    }
-    console.log(req);
-    
 
 });
 

@@ -12,10 +12,21 @@ const users = [
 
 const server = createServer((req,res)=>{
     logger(req,res,()=>{
+
+        
         if(req.url === "/api/users"){
+            let user = req.url.split('/')[3];
+            console.log(typeof(user));
+            
+            if(typeof(user) === "int"){
+            let userInfo = users.find((usuario)=>{ usuario.id === user});
+            console.log(userInfo);
+            res.end(JSON.stringify(userInfo));
+        }else{
             res.end(JSON.stringify(users));
         }
-    });
+        }
+        });
 
 
 });
